@@ -1,5 +1,5 @@
 // API_URL comes from the .env.development file
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { deletePost, fetchAllPosts } from "../../services/postService";
 
