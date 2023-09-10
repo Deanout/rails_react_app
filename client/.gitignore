@@ -26,3 +26,6 @@ dist-ssr
 # Don't push up env files you dummy
 .env
 .env.development
+
+# Don't push up the coverage directory
+coverage
