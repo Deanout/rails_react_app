@@ -12,8 +12,8 @@ function PostDetails() {
       try {
         const json = await fetchPost(id);
         setPost(json);
-      } catch (e) {
-        console.log("An error occurred:", e);
+      } catch (error) {
+        console.error("Failed to fetch the post: ", error);
       }
     };
     fetchCurrentPost();
