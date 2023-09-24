@@ -83,6 +83,10 @@ describe("PostForm component", () => {
       fireEvent.click(getByRole("button", { name: /submit/i }));
     });
     expect(mockSubmit).toHaveBeenCalledTimes(1);
-    expect(mockSubmit).toHaveBeenCalledWith({ title: newTitle, body: newBody });
+    expect(mockSubmit).toHaveBeenCalledWith({
+      title: newTitle,
+      body: newBody,
+      image: "",
+    });
   });
 });
