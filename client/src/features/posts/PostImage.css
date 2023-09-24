@@ -1,0 +1,25 @@
+.post-image {
+    width: 20rem;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+.post-image-stub {
+    width: 21rem;
+    height: 13rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
+    background-color: #aaa;
+}
+
+/* Needs to center the image or image stub inside of it. */
+.post-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
