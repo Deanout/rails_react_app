@@ -1,18 +1,24 @@
-import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 function useURLSearchParam(paramName, initialValue = "") {
-  const query = new URLSearchParams(window.location.search);
-  const [paramValue, setParamValue] = useState(
-    query.get(paramName) || initialValue
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    const newURL = paramValue
-      ? `${window.location.pathname}?${paramName}=${paramValue}`
-      : window.location.pathname;
+  // Directly get the value from searchParams
+  const paramValue = searchParams.get(paramName) || initialValue;
 
-    window.history.pushState({}, "", newURL);
-  }, [paramValue, paramName]);
+  const setParamValue = (value) => {
+    if (value) {
+      // Update only the specific parameter, and preserve the others.
+      setSearchParams({
+        ...Object.fromEntries(searchParams),
+        [paramName]: value,
+      });
+    } else {
+      // Remove the parameter if its value is falsy.
+      searchParams.delete(paramName);
+      setSearchParams(searchParams);
+    }
+  };
 
   return [paramValue, setParamValue];
 }
