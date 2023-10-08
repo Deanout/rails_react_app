@@ -54,7 +54,7 @@ function Pagination({ currentPage, totalPosts, postsPerPage, onPageChange }) {
         Previous
       </button>
 
-      {getVisiblePageNumbers().map((page, index) => {
+      {getVisiblePageNumbers().map((page, index) =>
         typeof page === "number" ? (
           <button
             key={page}
@@ -67,8 +67,8 @@ function Pagination({ currentPage, totalPosts, postsPerPage, onPageChange }) {
           <span key={`ellipsis-${index}`} style={{ margin: "0 5px" }}>
             {page}
           </span>
-        );
-      })}
+        )
+      )}
 
       <button
         onClick={handleNext}

@@ -1,6 +1,6 @@
 // API_URL comes from the .env.development file
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { deletePost } from "../../services/postService";
 import "./PostImage.css";
 
@@ -11,15 +11,23 @@ import useURLSearchParam from "../../hooks/useURLSearchParam";
 import Pagination from "./Pagination";
 
 function PostsList() {
-  const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] =
     useURLSearchParam("search");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const initialPageFromURL = Number(searchParams.get("page") || "1");
+  const [currentPage, setCurrentPage] = useState(initialPageFromURL);
+
+  const [posts, setPosts] = useState([]);
   const {
     posts: fetchedPosts,
-    loading,
-    error,
-  } = usePostsData(debouncedSearchTerm); // Note the change here
+    totalPosts: totalPosts,
+    loading: loading,
+    error: error,
+    perPage: perPage,
+  } = usePostsData(debouncedSearchTerm, currentPage); // Note the change here
 
   useEffect(() => {
     if (fetchedPosts) {
@@ -28,10 +36,18 @@ function PostsList() {
   }, [fetchedPosts]);
   console.log("Test");
 
+  useEffect(() => {
+    const initialSearchTerm = searchParams.get("search") || "";
+    setSearchTerm(initialSearchTerm);
+
+    const pageFromURL = searchParams.get("page") || "1";
+    setCurrentPage(Number(pageFromURL));
+  }, [searchParams]);
+
   const deletePostHandler = async (id) => {
     try {
       await deletePost(id);
-      setPosts(posts.filter((post) => post.id !== id));
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
     } catch (e) {
       console.error("Failed to delete the post: ", e);
     }
@@ -43,6 +59,13 @@ function PostsList() {
 
   const handleDebouncedSearchChange = (searchValue) => {
     setDebouncedSearchTerm(searchValue);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    // Update the URL to include the page number
+    setSearchParams({ search: debouncedSearchTerm, page: page });
   };
 
   return (
@@ -60,6 +83,7 @@ function PostsList() {
       />
       {loading && <p>Loading...</p>}
       {error && <p>Error loading posts.</p>}
+
       {posts.map((post) => (
         <div key={post.id} className="post-container">
           <h2>
